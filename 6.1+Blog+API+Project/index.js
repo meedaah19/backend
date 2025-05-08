@@ -14,7 +14,7 @@ let posts = [
     author: "Alex Thompson",
     date: "2023-08-01T10:00:00Z",
   },
-  {
+  { 
     id: 2,
     title: "The Impact of Artificial Intelligence on Modern Businesses",
     content:
@@ -42,7 +42,17 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 //CHALLENGE 1: GET All posts
 
+app.get('/all', (req, res) =>{
+  posts.forEach(function(post) {
+    console.log(post);
+  });
+  res.json(posts);
+  console.log("All posts retrieved successfully");
+})
+
 //CHALLENGE 2: GET a specific post by id
+
+app.get('/post')
 
 //CHALLENGE 3: POST a new post
 
