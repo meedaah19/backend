@@ -75,10 +75,11 @@ app.post('/posts', (req, res) => {
 })
 
 //CHALLENGE 4: PATCH a post when you just want to update one parameter
-
+ 
 app.patch('/posts/:id', (req, res) =>{
   const id = parseInt(req.params.id);
-  const existingPost = posts.findIndex((post) => post.id === id);
+  const existingPost = posts.findIndex(
+    (post) => post.id === id);
   const editPost = {
     id:id,
     title: req.body.title || existingPost.title,
