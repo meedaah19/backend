@@ -21,7 +21,7 @@ let currentUserId = 1;
 
 let users = [
   { id: 1, name: "Angela", color: "teal" },
-  { id: 2, name: "Jack", color: "powderblue" },
+  { id: 2, name: "Jack", color: "powderblue" }, 
 ];
 
 async function checkVisisted() {
@@ -85,7 +85,7 @@ app.post("/user", async (req, res) => {
     currentUserId = req.body.user;
     res.redirect("/");
   }
-});
+});  
 
 app.post("/new", async (req, res) => {
   const name = req.body.name;
