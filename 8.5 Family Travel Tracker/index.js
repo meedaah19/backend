@@ -19,12 +19,16 @@ app.use(express.static("public"));
 
 let currentUserId = 1;
 
-let users = [];
+let users = [
+  { id: 1, name: "Angela", color: "teal" },
+  { id: 2, name: "Jack", color: "powderblue" }, 
+];
 
 async function checkVisisted() {
-  const result = await db.query(    
+  const result = await db.query(
     "SELECT country_code FROM visited_countries JOIN users ON users.id = user_id WHERE user_id = $1; ",
-    [currentUserId]);
+    [currentUserId]
+  );
   let countries = [];
   result.rows.forEach((country) => {
     countries.push(country.country_code);
@@ -32,24 +36,25 @@ async function checkVisisted() {
   return countries;
 }
 
-async function currentUser() {
+async function getCurrentUser() {
   const result = await db.query("SELECT * FROM users");
   users = result.rows;
   return users.find((user) => user.id == currentUserId);
-} 
+}
 
 app.get("/", async (req, res) => {
   const countries = await checkVisisted();
-  const Cusers = await currentUser();
+  const currentUser = await getCurrentUser();
   res.render("index.ejs", {
     countries: countries,
     total: countries.length,
     users: users,
-    color: Cusers.color,
+    color: currentUser.color,
   });
 });
 app.post("/add", async (req, res) => {
   const input = req.body["country"];
+  const currentUser = await getCurrentUser();
 
   try {
     const result = await db.query(
@@ -67,29 +72,12 @@ app.post("/add", async (req, res) => {
       res.redirect("/");
     } catch (err) {
       console.log(err);
-      const countries = await checkVisisted();
-      const Cusers = await currentUser();
-      res.render("index.ejs", {
-        countries: countries,
-        total: countries.length,
-        users: users,
-        color: Cusers.color,
-        error: 'Countries has already been added, try again',
-      });
     }
   } catch (err) {
     console.log(err);
-    const countries = await checkVisisted();
-    const Cusers = await currentUser();
-    res.render("index.ejs", {
-      countries: countries,
-      total: countries.length,
-      users: users,
-      color: Cusers.color,
-      error: 'Countries has already been added, try again',
-    });
   }
 });
+
 app.post("/user", async (req, res) => {
   if (req.body.add === "new") {
     res.render("new.ejs");
@@ -97,7 +85,7 @@ app.post("/user", async (req, res) => {
     currentUserId = req.body.user;
     res.redirect("/");
   }
-});
+});  
 
 app.post("/new", async (req, res) => {
   const name = req.body.name;
@@ -112,8 +100,6 @@ app.post("/new", async (req, res) => {
   currentUserId = id;
 
   res.redirect("/");
-  //Hint: The RETURNING keyword can return the data that was inserted.
-  //https://www.postgresql.org/docs/current/dml-returning.html
 });
 
 app.listen(port, () => {
