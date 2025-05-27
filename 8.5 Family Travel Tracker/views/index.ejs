@@ -394,6 +394,18 @@
       document.getElementById(code).style.fill = "<%= color %>"
     });
   </script>
+  <script>
+  const visitedCountries = <%- JSON.stringify(countries) %>;
+  const userColor = "<%= color %>";
+
+  visitedCountries.forEach(code => {
+    const countryElement = document.getElementById(code);
+    if (countryElement) {
+      countryElement.style.fill = userColor;
+    }
+  });
+</script>
+
 </body>
 
 </html>

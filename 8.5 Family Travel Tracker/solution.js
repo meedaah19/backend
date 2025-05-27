@@ -9,7 +9,7 @@ const db = new pg.Client({
   user: "postgres",
   host: "localhost",
   database: "world",
-  password: "Meedaah19",
+  password: "123456",
   port: 5432,
 });
 db.connect();
@@ -21,7 +21,7 @@ let currentUserId = 1;
 
 let users = [
   { id: 1, name: "Angela", color: "teal" },
-  { id: 2, name: "Jack", color: "powderblue" }, 
+  { id: 2, name: "Jack", color: "powderblue" },
 ];
 
 async function checkVisisted() {
@@ -72,21 +72,9 @@ app.post("/add", async (req, res) => {
       res.redirect("/");
     } catch (err) {
       console.log(err);
-      res.render("index.ejs", {
-        countries: countries,
-        total: countries.length,
-        users: users,
-        color: currentUser.color,
-      });
     }
   } catch (err) {
     console.log(err);
-    res.render("index.ejs", {
-      countries: countries,
-      total: countries.length,
-      users: users,
-      color: currentUser.color,
-    });
   }
 });
 
@@ -97,7 +85,7 @@ app.post("/user", async (req, res) => {
     currentUserId = req.body.user;
     res.redirect("/");
   }
-});  
+});
 
 app.post("/new", async (req, res) => {
   const name = req.body.name;
