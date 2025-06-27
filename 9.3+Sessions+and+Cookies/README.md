@@ -8,8 +8,7 @@ the password line of code must come after the session line of code
 
 to set timer to the time your login will expire you will use cookies then set timer
 
-Client id: d8475044786-f6h93qkm3jqfdb21uhda18s6kr2jo03a.apps.googleusercontent.com
-
+Client id: 8475044786-f6h93qkm3jqfdb21uhda18s6kr2jo03a.apps.googleusercontent.com
 Client secret: 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
 
 A auth is a open stanadrd for token base authorization.
