@@ -11,6 +11,9 @@ import env from "dotenv";
 const app = express();
 const port = 3000;
 const saltRounds = 10;
+
+let secret = [];
+
 env.config();
 
 app.use(
@@ -56,16 +59,30 @@ app.get("/logout", (req, res) => {
   });
 });
 
-app.get("/secrets", (req, res) => {
+app.get("/secrets", async (req, res) => {
   if (req.isAuthenticated()) {
-    res.render("secrets.ejs");
-
+    try {
+      const result = await db.query('SELECT secret FROM users WHERE email = $1',
+         [req.user.email])
+      const secret = result.rows[0].secret
+      res.render("secrets.ejs", {secret});
+    } catch (error) {
+      console.log(err);
+    }
     //TODO: Update this to pull in the user secret to render in secrets.ejs
   } else {
     res.redirect("/login");
   }
 });
 
+
+app.get('/submit', (req, res) => {
+  if (req.isAuthenticated()) {
+    res.render('submit.ejs')
+  } else {
+    res.redirect("/login");
+  }
+})
 //TODO: Add a get route for the submit button
 //Think about how the logic should work with authentication.
 
@@ -125,6 +142,18 @@ app.post("/register", async (req, res) => {
   }
 });
 
+
+app.post('/submit', async (req, res) => {
+  const {secret} = req.body;
+
+  try {
+    await db.query('UPDATE users SET secret = $1 WHERE email = $2 ',
+       [secret, req.user.email]);
+    res.redirect("/secrets");
+  } catch (error) {
+    console.log(err);
+  }
+});
 //TODO: Create the post route for submit.
 //Handle the submitted data and add it to the database
 
